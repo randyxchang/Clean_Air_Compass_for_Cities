@@ -70,10 +70,10 @@ function switchProfileTab(tabName) {
 // ========== Hero Map ==========
 function initHeroMap() {
   heroMap = L.map('hero-map', {
-    zoomControl: false,
+    zoomControl: true,
     attributionControl: false,
-    scrollWheelZoom: false,
-    dragging: false,
+    scrollWheelZoom: true,
+    dragging: true,
   }).setView([20, 0], 2);
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {

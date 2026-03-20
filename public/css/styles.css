@@ -54,7 +54,7 @@ body {
   height: 64px;
 }
 
-.logo { display: flex; align-items: center; gap: 10px; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; cursor: pointer; }
 
 .logo-bars { display: flex; gap: 3px; align-items: flex-end; height: 24px; }
 .bar { width: 5px; border-radius: 2px; }
