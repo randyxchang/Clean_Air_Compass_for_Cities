@@ -74,10 +74,16 @@ function initHeroMap() {
     attributionControl: false,
     scrollWheelZoom: true,
     dragging: true,
+    worldCopyJump: true,
+    maxBounds: [[-85, -180], [85, 180]],
+    maxBoundsViscosity: 1.0,
+    minZoom: 2,
   }).setView([20, 0], 2);
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 19,
+    noWrap: true,
+    bounds: [[-85, -180], [85, 180]],
   }).addTo(heroMap);
 
   cities.forEach((city) => {
@@ -203,10 +209,16 @@ function initFullMap() {
   fullMap = L.map('full-map', {
     zoomControl: true,
     attributionControl: true,
+    worldCopyJump: true,
+    maxBounds: [[-85, -180], [85, 180]],
+    maxBoundsViscosity: 1.0,
+    minZoom: 2,
   }).setView([20, 0], 3);
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 19,
+    noWrap: true,
+    bounds: [[-85, -180], [85, 180]],
     attribution: '&copy; OpenStreetMap &copy; CARTO',
   }).addTo(fullMap);
 
