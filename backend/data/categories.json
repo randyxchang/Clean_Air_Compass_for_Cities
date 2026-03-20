@@ -1,0 +1,37 @@
+[
+  {
+    "id": "transport",
+    "name": "Transport",
+    "icon": "directions_car",
+    "description": "Policies and actions related to transportation emissions, including public transit, vehicle standards, and active mobility.",
+    "color": "#2196F3"
+  },
+  {
+    "id": "energy",
+    "name": "Energy",
+    "icon": "bolt",
+    "description": "Policies targeting energy production and consumption, including renewables, efficiency, and clean heating/cooling.",
+    "color": "#FF9800"
+  },
+  {
+    "id": "industry",
+    "name": "Industry",
+    "icon": "factory",
+    "description": "Industrial emission controls, standards, and clean technology adoption.",
+    "color": "#9C27B0"
+  },
+  {
+    "id": "waste",
+    "name": "Waste Management",
+    "icon": "delete",
+    "description": "Waste reduction, recycling, methane capture, and circular economy initiatives.",
+    "color": "#4CAF50"
+  },
+  {
+    "id": "land_use",
+    "name": "Land Use",
+    "icon": "park",
+    "description": "Urban planning, green spaces, zoning, and nature-based solutions for air quality.",
+    "color": "#795548"
+  }
+]

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City Clean Air Compass</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-bars">
+          <span class="bar bar-1"></span>
+          <span class="bar bar-2"></span>
+          <span class="bar bar-3"></span>
+        </div>
+        <span class="logo-text">City Clean Air Compass</span>
+      </div>
+      <nav class="nav">
+        <a href="#" class="nav-link active" data-view="about">About</a>
+        <a href="#" class="nav-link" data-view="map">Map</a>
+        <a href="#" class="nav-link" data-view="city-profile">City Profile</a>
+        <a href="#" class="nav-link" data-view="compare">Compare Cities</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ==================== About View ==================== -->
+  <section id="view-about" class="view active">
+    <div class="hero">
+      <div class="hero-content">
+        <h1>Mapping the Path to <span class="text-accent">Cleaner Air</span></h1>
+        <p class="hero-subtitle">
+          An interactive tool tracking city-level air quality policies, progress, and outcomes
+          across the globe. Explore how cities are tackling air pollution through transport,
+          energy, industry, waste, and land use interventions.
+        </p>
+        <button class="btn btn-primary" onclick="showView('city-profile')">Explore Cities</button>
+      </div>
+      <div class="hero-map" id="hero-map"></div>
+    </div>
+
+    <div class="container">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-number" id="stat-cities">--</div>
+          <div class="stat-label">Cities Tracked</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-policy-cities">--</div>
+          <div class="stat-label">With Policy Data</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-regions">--</div>
+          <div class="stat-label">Regions Covered</div>
+        </div>
+      </div>
+
+      <h2 class="section-title">How It Works</h2>
+      <div class="categories-grid">
+        <div class="category-card" style="border-left-color: #2196F3">
+          <span class="material-icons" style="color: #2196F3">public</span>
+          <h3>Explore Cities</h3>
+          <p>Browse 278 cities worldwide and view their air quality composite index scores.</p>
+        </div>
+        <div class="category-card" style="border-left-color: #FF9800">
+          <span class="material-icons" style="color: #FF9800">bar_chart</span>
+          <h3>Air Quality Trends</h3>
+          <p>View PM2.5 smogstripes from 1998-2022 and daily air quality patterns.</p>
+        </div>
+        <div class="category-card" style="border-left-color: #4CAF50">
+          <span class="material-icons" style="color: #4CAF50">balance</span>
+          <h3>Equity Analysis</h3>
+          <p>Examine how air pollution is distributed across different communities within cities.</p>
+        </div>
+        <div class="category-card" style="border-left-color: #9C27B0">
+          <span class="material-icons" style="color: #9C27B0">health_and_safety</span>
+          <h3>Health Impacts</h3>
+          <p>Understand pollution sources and their health consequences for select cities.</p>
+        </div>
+        <div class="category-card" style="border-left-color: #F44336">
+          <span class="material-icons" style="color: #F44336">compare_arrows</span>
+          <h3>Compare Cities</h3>
+          <p>Compare air quality scores, trends, and policy performance side by side.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Map View ==================== -->
+  <section id="view-map" class="view">
+    <div class="map-view-container">
+      <div id="full-map"></div>
+      <div class="map-info-panel" id="map-info-panel">
+        <h3>City Clean Air Compass</h3>
+        <p style="font-size:13px;color:var(--gray-500);margin-bottom:8px">Click a city marker to view details.</p>
+        <div id="map-city-info" class="hidden">
+          <h3 id="map-city-name"></h3>
+          <div id="map-city-details"></div>
+          <button class="btn btn-primary" id="map-view-profile-btn">View Full Profile</button>
+        </div>
+      </div>
+      <div class="map-legend">
+        <h4>Composite Score</h4>
+        <div class="map-legend-items">
+          <div class="map-legend-item"><div class="map-legend-dot" style="background:#22c55e"></div> 70+</div>
+          <div class="map-legend-item"><div class="map-legend-dot" style="background:#84cc16"></div> 55-70</div>
+          <div class="map-legend-item"><div class="map-legend-dot" style="background:#eab308"></div> 45-55</div>
+          <div class="map-legend-item"><div class="map-legend-dot" style="background:#f59e0b"></div> 35-45</div>
+          <div class="map-legend-item"><div class="map-legend-dot" style="background:#ef4444"></div> &lt; 35</div>
+          <div class="map-legend-item"><div class="map-legend-dot" style="background:#9ca3af"></div> No data</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== City Profile View ==================== -->
+  <section id="view-city-profile" class="view">
+    <div class="container">
+      <div class="profile-layout">
+        <!-- Sidebar -->
+        <div class="profile-sidebar">
+          <h2 class="section-title">Select a City</h2>
+          <input type="text" id="city-search" class="city-search" placeholder="Search cities...">
+          <div class="city-list" id="city-list"></div>
+        </div>
+
+        <!-- Main content -->
+        <div class="profile-main">
+          <div id="profile-placeholder" class="placeholder-message">
+            <span class="material-icons">location_city</span>
+            <p>Select a city to view its air quality profile</p>
+          </div>
+
+          <div id="profile-content" class="profile-content hidden">
+            <!-- City header -->
+            <div class="profile-header">
+              <div>
+                <h2 id="profile-city-name" class="profile-city-name"></h2>
+                <span id="profile-country" class="profile-country"></span>
+              </div>
+              <div id="profile-score-badge" class="score-badge"></div>
+            </div>
+
+            <!-- Sub-tabs -->
+            <div class="profile-tabs">
+              <button class="profile-tab active" data-tab="overview">Overview</button>
+              <button class="profile-tab" data-tab="air-quality">Air Quality</button>
+              <button class="profile-tab" data-tab="equity">Equity</button>
+              <button class="profile-tab hidden" data-tab="sources" id="tab-btn-sources">Sources & Impacts</button>
+              <button class="profile-tab hidden" data-tab="policy" id="tab-btn-policy">Policy</button>
+            </div>
+
+            <!-- Tab: Overview -->
+            <div id="tab-overview" class="tab-content active">
+              <div class="overview-grid">
+                <div class="overview-left">
+                  <div class="profile-stats" id="overview-stats"></div>
+                  <div class="profile-map-container">
+                    <div id="profile-map" class="profile-map"></div>
+                  </div>
+                </div>
+                <div class="overview-right">
+                  <div id="city-image-container" class="city-image-container hidden">
+                    <img id="city-image" class="city-image" alt="City map">
+                  </div>
+                  <div class="chart-container">
+                    <h3 class="subsection-title">Composite Score Breakdown</h3>
+                    <canvas id="score-breakdown-chart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab: Air Quality -->
+            <div id="tab-air-quality" class="tab-content">
+              <div id="aq-loading" class="loading-msg">Loading air quality data...</div>
+              <div id="aq-content" class="hidden">
+                <h3 class="subsection-title">PM2.5 Smogstripes (1998-2022)</h3>
+                <div id="smogstripes-container" class="smogstripes-container"></div>
+                <div class="smogstripes-legend" id="smogstripes-legend"></div>
+
+                <div class="chart-container">
+                  <h3 class="subsection-title">PM2.5 Trend</h3>
+                  <canvas id="pm25-trend-chart"></canvas>
+                </div>
+
+                <div id="daily-section" class="hidden">
+                  <div class="chart-container">
+                    <h3 class="subsection-title">2021 Monthly PM2.5</h3>
+                    <canvas id="daily-chart"></canvas>
+                  </div>
+                  <div class="distributions-row">
+                    <div class="chart-container">
+                      <h3 class="subsection-title">WHO Guideline Distribution</h3>
+                      <canvas id="who-dist-chart"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab: Equity -->
+            <div id="tab-equity" class="tab-content">
+              <div id="equity-loading" class="loading-msg">Loading equity data...</div>
+              <div id="equity-content" class="hidden">
+                <div class="equity-stats" id="equity-stats"></div>
+                <div class="equity-map-container">
+                  <div class="equity-toggle">
+                    <button class="btn btn-sm active" id="eq-toggle-pm25" onclick="setEquityPollutant('pm25')">PM2.5</button>
+                    <button class="btn btn-sm" id="eq-toggle-no2" onclick="setEquityPollutant('no2')">NO2</button>
+                  </div>
+                  <div id="equity-map" class="equity-map"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab: Sources & Impacts -->
+            <div id="tab-sources" class="tab-content">
+              <div id="sources-loading" class="loading-msg">Loading health data...</div>
+              <div id="sources-content" class="hidden">
+                <div class="sources-grid">
+                  <div class="chart-container">
+                    <h3 class="subsection-title">Pollution Source Breakdown</h3>
+                    <canvas id="source-chart"></canvas>
+                  </div>
+                  <div class="chart-container">
+                    <h3 class="subsection-title">Health Impact Attribution</h3>
+                    <canvas id="health-chart"></canvas>
+                  </div>
+                </div>
+                <div id="health-metrics" class="health-metrics"></div>
+              </div>
+            </div>
+
+            <!-- Tab: Policy -->
+            <div id="tab-policy" class="tab-content">
+              <div id="policy-content">
+                <div class="policy-highlight" id="policy-highlight"></div>
+                <div class="chart-container">
+                  <h3 class="subsection-title">Score With vs Without Policy</h3>
+                  <canvas id="policy-compare-chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Compare View ==================== -->
+  <section id="view-compare" class="view">
+    <div class="container">
+      <h2 class="section-title">Compare Cities</h2>
+      <p class="section-desc">Select cities to compare their composite air quality scores side by side.</p>
+
+      <div class="compare-selector">
+        <input type="text" id="compare-search" class="city-search" placeholder="Search cities...">
+        <div id="compare-checkboxes" class="compare-checkboxes"></div>
+        <button class="btn btn-primary" onclick="runComparison()">Compare Selected</button>
+      </div>
+
+      <div id="compare-results" class="compare-results hidden">
+        <div class="chart-container chart-container-wide">
+          <h3 class="subsection-title">Final Composite Score</h3>
+          <canvas id="compare-score-chart"></canvas>
+        </div>
+        <div class="chart-container chart-container-wide">
+          <h3 class="subsection-title">Score Components</h3>
+          <canvas id="compare-components-chart"></canvas>
+        </div>
+        <div id="compare-table-container"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>City Clean Air Compass &mdash; Data-Driven EnviroLab, UNC Chapel Hill</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/overview.js"></script>
+  <script src="/js/airquality.js"></script>
+  <script src="/js/equity.js"></script>
+  <script src="/js/sources.js"></script>
+  <script src="/js/compare.js"></script>
+</body>
+</html>
