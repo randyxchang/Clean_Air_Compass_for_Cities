@@ -36,12 +36,15 @@ async function loadAirQuality(city) {
     }
 
     const dailySection = document.getElementById('daily-section');
+    const whoDistSection = document.getElementById('who-dist-section');
     if (dailyData) {
       dailySection.classList.remove('hidden');
+      whoDistSection.classList.remove('hidden');
       renderDailyChart(dailyData);
       renderWhoDistChart(dailyData);
     } else {
       dailySection.classList.add('hidden');
+      whoDistSection.classList.add('hidden');
     }
 
     _aqLoaded = city.id;
